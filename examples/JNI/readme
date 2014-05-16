@@ -1,0 +1,5 @@
+Made with this tutorial:
+http://www3.ntu.edu.sg/home/ehchua/programming/java/JavaNativeInterface.html
+
+use this command to compile the c code instead of the command given in the tutorial:
+gcc -shared -o libhello.so -fPIC hello.c

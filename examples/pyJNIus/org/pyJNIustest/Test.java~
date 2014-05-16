@@ -1,0 +1,22 @@
+package org.pyJNIustest;
+
+public class Test
+{
+	static void run()
+	{
+		System.out.println("Hello world!");
+	}
+	void run2()
+	{
+		System.out.println("Hello world2!");
+	}
+	final static int A = 5;
+	public String toString()
+	{
+		return "aap noot mies";
+	}
+	Test()
+	{
+		System.out.println("Constructed!");
+	}
+}

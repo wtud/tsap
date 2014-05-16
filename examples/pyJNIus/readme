@@ -1,0 +1,7 @@
+1.)first install cython and pyJNIus:
+pip install cython
+sudo pip install git+git://github.com/kivy/pyjnius.git
+2.)compile java code:
+javac org/pyJNIustest/Test.java
+3.)run python code:
+python pytest.py
