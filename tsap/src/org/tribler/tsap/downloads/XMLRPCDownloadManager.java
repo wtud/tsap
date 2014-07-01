@@ -110,7 +110,6 @@ public class XMLRPCDownloadManager implements IPollListener {
 	private void replaceAllProgressInfo() {
 
 		Object result = mConnection.call("downloads.get_all_progress_info");
-		Log.e("", "Result is: " + result.toString());
 		Object[] arrayResult = (Object[]) result;
 		ArrayList<Download> resultsList = new ArrayList<Download>();
 

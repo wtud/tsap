@@ -1,6 +1,7 @@
 package org.tribler.tsap.thumbgrid;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 import org.tribler.tsap.R;
@@ -63,6 +64,35 @@ public class XMLRPCTorrentManager implements Poller.IPollListener{
 	}
 	
 	/**
+	 * Applies filter to ThumbItem
+	 * @param item The item which should be filtered (or not)
+	 * @param filter The filter which should be applied
+	 * @return True if the item should be let through, false if the item should be filtered
+	 */
+	private boolean applyResultFilter(ThumbItem item, Settings.TorrentType filter)
+	{
+		String category = (item != null) ? item.getCategory().toLowerCase(Locale.US) : null;
+		
+		// Something went wrong here
+		if(category == null)
+			return false;
+		
+		switch(filter)
+		{
+		// True when: Video, VideoClip, XXX, Other.
+		// "XXX" isn't filtered because we have a family filter, and most are video anyway
+		// "Other" isn't filtered, as not all torrents have a correct category set
+		case VIDEO:
+			return (category.startsWith("video") || category.equals("other") || category.equals("xxx"));
+
+		// ALL or any unknown filter should just let them all through
+		case ALL:
+		default:
+			return true;
+		}
+	}
+	
+	/**
 	 * It will send the found torrents to the adapter.
 	 */
 	private void addRemoteResults() {
@@ -77,7 +107,7 @@ public class XMLRPCTorrentManager implements Poller.IPollListener{
 			ThumbItem item = convertMapToThumbItem(
 					(Map<String, Object>) arrayResult[i]);
 			
-			if(Utility.applyResultFilter(item, localFilter))
+			if(applyResultFilter(item, localFilter))
 			{
 				resultsList.add(item);
 			}
