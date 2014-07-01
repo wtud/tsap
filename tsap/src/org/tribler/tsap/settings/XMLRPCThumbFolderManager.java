@@ -11,12 +11,13 @@ import de.timroes.axmlrpc.XMLRPCException;
  * Singleton class for adding and accessing downloads. 
  * @author Dirk Schut
  */
-public class XMLRPCThumbFolderManager {
+public class XMLRPCThumbFolderManager implements XMLRPCConnection.IConnectionListener{
 
 	protected XMLRPCConnection mConnection;
 	
 	public XMLRPCThumbFolderManager(XMLRPCConnection connection) {
 		mConnection = connection;
+		mConnection.addListener(this);
 	}
 	
 	public void getThumbFolder() {
@@ -32,4 +33,13 @@ public class XMLRPCThumbFolderManager {
 				}
 		}.call("settings.get_thumbs_directory", mConnection);
 	}
+
+	@Override
+	public void onConnectionEstablished() {
+		Settings.loadThumbFolder();
+		mConnection.removeListener(this);
+	}
+
+	@Override
+	public void onConnectionLost() {}
 }
