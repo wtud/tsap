@@ -80,8 +80,11 @@ public class ThumbGridFragment extends Fragment implements OnQueryTextListener, 
 		
 		mStatusViewer.updateViews((ProgressBar)mView.findViewById(R.id.thumbgrid_progress_bar),
 				(TextView)mView.findViewById(R.id.thumbgrid_text_view));
-		
-		mStatusViewer.setMessage(R.string.connection_loading, true);
+		if(mConnection.isJustStarted()) {
+			mStatusViewer.setMessage(R.string.connection_loading, true);
+		} else {
+			mStatusViewer.setMessage(R.string.empty, true);
+		}
 		return mView;
 	}
 
@@ -182,7 +185,6 @@ public class ThumbGridFragment extends Fragment implements OnQueryTextListener, 
 
 	@Override
 	public void onConnectionEstablished() {
-		mStatusViewer.setMessage(R.string.thumb_grid_server_started, false);
 		mPoller.start();
 	}
 	@Override
