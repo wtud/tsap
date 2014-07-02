@@ -61,5 +61,7 @@ public class StatusViewer {
 			}
 		});
 	}
-
+	public boolean isEnabled() {
+		return mEnabled;
+	}
 }

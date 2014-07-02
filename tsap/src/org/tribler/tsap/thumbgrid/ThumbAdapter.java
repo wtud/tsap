@@ -122,7 +122,7 @@ public class ThumbAdapter extends AbstractArrayListAdapter<Torrent> {
 				}
 			}
 		}
-		Log.e("", "Torrents added!");
+		Log.v("ThumbAdapter", "Torrents added!");
 		notifyChangesToUiThread();
 	}
 }

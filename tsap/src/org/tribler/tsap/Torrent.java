@@ -178,5 +178,15 @@ public class Torrent implements Serializable {
 	public String toString() {
 		return name;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Torrent) {
+			return infoHash.equals(((Torrent)other).infoHash);
+		} else {
+			return false;
+		}
+		
+	}
 
 }
