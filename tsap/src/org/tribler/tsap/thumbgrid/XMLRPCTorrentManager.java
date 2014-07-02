@@ -26,6 +26,10 @@ public class XMLRPCTorrentManager implements Poller.IPollListener {
 	private StatusViewer mStatusViewer;
 	private boolean mJustStarted = true;
 	private int mLastFoundResults = 0;
+	
+	public static final String RPC_SEARCH_REMOTE = "torrents.search_remote";
+	public static final String RPC_REMOTE_RESULTS_COUNT = "torrents.get_remote_results_count";
+	public static final String RPC_REMOTE_RESULTS = "torrents.get_remote_results";
 
 	/**
 	 * Constructor: Makes a connection with an XMLRPC server and starts a
@@ -53,7 +57,7 @@ public class XMLRPCTorrentManager implements Poller.IPollListener {
 	private void searchRemote(final String keywords) {
 		Log.v("XMPLRCTorrentManager", "Remote search for \"" + keywords
 				+ "\" launched.");
-		new XMLRPCCallTask().call("torrents.search_remote", mConnection,
+		new XMLRPCCallTask().call(RPC_SEARCH_REMOTE, mConnection,
 				keywords);
 		mStatusViewer.setMessage(R.string.thumb_grid_search_submitted, true);
 		// TODO: communicate if the search succeeded.
@@ -64,7 +68,7 @@ public class XMLRPCTorrentManager implements Poller.IPollListener {
 	 * results.
 	 */
 	private int getRemoteResultsCount() {
-		return (Integer) mConnection.call("torrents.get_remote_results_count");
+		return (Integer) mConnection.call(RPC_REMOTE_RESULTS_COUNT);
 	}
 
 	/**
@@ -108,7 +112,7 @@ public class XMLRPCTorrentManager implements Poller.IPollListener {
 	 */
 	private void addRemoteResults() {
 		Object[] arrayResult = (Object[]) mConnection
-				.call("torrents.get_remote_results");
+				.call(RPC_REMOTE_RESULTS);
 		ArrayList<Torrent> resultsList = new ArrayList<Torrent>();
 		Settings.TorrentType localFilter = Settings.getFilteredTorrentTypes();
 
