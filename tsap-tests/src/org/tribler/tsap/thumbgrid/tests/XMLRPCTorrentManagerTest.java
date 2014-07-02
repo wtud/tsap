@@ -112,6 +112,7 @@ public class XMLRPCTorrentManagerTest extends ActivityInstrumentationTestCase2<M
 		
 		mConnection.addReturnValue(XMLRPCTorrentManager.RPC_REMOTE_RESULTS, list);
 		mConnection.addReturnValue(XMLRPCTorrentManager.RPC_REMOTE_RESULTS_COUNT, 1);
+		
 		mManager.onPoll();
 		
 		assertEquals(1, mConnection.getTimesCalled(XMLRPCTorrentManager.RPC_REMOTE_RESULTS));
