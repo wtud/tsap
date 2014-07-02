@@ -25,6 +25,7 @@ public class XMLRPCTorrentManager implements Poller.IPollListener {
 	private XMLRPCConnection mConnection;
 	private StatusViewer mStatusViewer;
 	private boolean mJustStarted = true;
+	private int mLastFoundResults = 0;
 	
 	public static final String RPC_SEARCH_REMOTE = "torrents.search_remote";
 	public static final String RPC_REMOTE_RESULTS_COUNT = "torrents.get_remote_results_count";
@@ -117,14 +118,14 @@ public class XMLRPCTorrentManager implements Poller.IPollListener {
 			if (applyResultFilter(item, localFilter)) {
 				resultsList.add(item);
 			} else {
-				Log.e("TorrentFilter",
+				Log.w("TorrentFilter",
 						"Filtered remote result because of category filter ("
 								+ item.getName() + ", " + item.getCategory()
 								+ ")");
 			}
 		}
 		// if the thumbgrid was empty, remove the StatusViewer
-		if (mAdapter.getCount() == 0) {
+		if (mAdapter.getCount() == 0 && !resultsList.isEmpty()) {
 			mStatusViewer.disable();
 		}
 		mAdapter.addNew(resultsList);
@@ -144,6 +145,7 @@ public class XMLRPCTorrentManager implements Poller.IPollListener {
 
 	public void search(String keywords) {
 		mAdapter.clear();
+		mLastFoundResults = 0;
 		mStatusViewer.enable();
 		searchRemote(keywords);
 		Log.i("XMPLRCTorrentManager", "Search for \"" + keywords
@@ -153,9 +155,11 @@ public class XMLRPCTorrentManager implements Poller.IPollListener {
 	@Override
 	public void onPoll() {
 		int foundResults = getRemoteResultsCount();
-		if (foundResults > mAdapter.getCount()) {
+		if (foundResults > mLastFoundResults) {
+			mLastFoundResults = foundResults;
 			addRemoteResults();
 			mJustStarted = false;
+			Log.e("TorrentManager", "New torrents found!");
 		} else if (mJustStarted) {
 			mJustStarted = false;
 			mStatusViewer.setMessage(R.string.thumb_grid_server_started, false);
